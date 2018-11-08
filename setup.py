@@ -108,7 +108,8 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'py.pcake=py_cake:cli',
+            'pycake=pycake:cli',
+            'py.cake=pycake:cli',
         ],
     },
     cmdclass={'test': PyTest},

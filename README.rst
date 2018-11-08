@@ -18,7 +18,7 @@ Install
 
 Quickstart
 ----------
-``py.cake``
+``pycake`` or ``py.cake``
 
 
 Commands
