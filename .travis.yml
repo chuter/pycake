@@ -1,0 +1,40 @@
+sudo: false
+language: python
+
+# command to install dependencies
+install: "make init"
+
+# command to run tests
+script:
+  - make ci
+
+cache: pip
+jobs:
+  include:
+    - stage: test
+      script:
+        - make flake8
+        - make ci
+      python: '2.7'
+    - stage: test
+      script:
+        - make flake8
+        - make ci
+      python: '3.5'
+    - stage: test
+      script:
+        - make flake8
+        - make ci
+      python: '3.6'
+    - stage: test
+      script:
+        - make flake8
+        - make ci
+      python: '3.7'
+      dist: xenial
+      sudo: true
+    - stage: coverage
+      script:
+        - make coverage
+        - codecov
+      python: 3.6

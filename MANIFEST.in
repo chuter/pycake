@@ -1,0 +1,12 @@
+include AUTHORS.rst
+include HISTORY.rst
+include LICENSE
+include README.rst
+include *.ini *.yml .coveragerc Makefile
+include Pipfile Pipfile.lock
+
+recursive-include tests *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+
+graft src

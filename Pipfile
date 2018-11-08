@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+detox = "==0.13"
+tox = "==3.2.1"
+pytest-cookies = "*"
+
+[dev-packages]
+pytest = "==3.9.2"
+pytest-cov = "*"
+pytest-mock = "*"
+pytest-xdist = "*"
+"flake8" = "*"
+readme-renderer = "*"
+codecov = "*"
+mock = "*"
+
+[requires]
+python_version = "3.7"
