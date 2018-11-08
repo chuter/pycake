@@ -12,8 +12,9 @@ class PyCakeGroup(Group):
 
     def get_help_option(self, ctx):
         from .cli_utils import format_help
-
-        """Override for showing formatted main help via --help and -h options"""
+        """
+        Override for showing formatted main help via --help and -h options
+        """
         help_options = self.get_help_option_names(ctx)
         if not help_options or not self.add_help_option:
             return

@@ -113,7 +113,7 @@ def test_prepare_with_default_context(tmpdir, runner, license_strings,
             default_project_slug,
             *('AUTHORS.rst', 'LICENSE', '.gitignore', 'HISTORY.rst',
               'Makefile', 'MANIFEST.in', 'Pipfile', 'README.rst',
-              'setup.cfg', 'tox.ini')
+              'setup.cfg', 'tox.ini', 'pytest.ini')
         )
         assert_file_contains(
             os.path.join(default_project_slug, 'setup.py'),
