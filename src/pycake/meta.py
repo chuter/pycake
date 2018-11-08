@@ -3,4 +3,4 @@
 
 
 __version__ = '0.1.0b1'
-__name__ = 'pycake'
+__name__ = 'py_cake'

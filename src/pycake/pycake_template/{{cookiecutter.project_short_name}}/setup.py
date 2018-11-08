@@ -22,7 +22,7 @@ AUTHOR = "{{ cookiecutter.author_name.replace('\"', '\\\"') }}",
 VERSION = None
 
 
-REQUIRED = [{%- if cookiecutter.command_line_interface|lower == 'click' %}'Click>=6.0',{%- endif %} ]  # ：noqa
+REQUIRED = [{%- if cookiecutter.command_line_interface|lower == 'click' %}'Click>=6.0',{%- endif %} ]  # noqa
 
 TEST_REQUIREMENTS = [
     'pytest-cov',

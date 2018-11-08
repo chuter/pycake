@@ -13,12 +13,12 @@ Install
 
 .. code-block:: bash
 
-    pip install pycake
+    pip install py_cake
 
 
 Quickstart
 ----------
-``pycake`` or ``py.cake``
+``py.cake``
 
 
 Commands
@@ -31,8 +31,8 @@ Commands
     py.cake prepare
 
 
-.. |Pypi Release| image:: https://img.shields.io/pypi/v/pycake.svg
-.. |Python Version| image:: https://img.shields.io/pypi/pyversions/pycake.svg
+.. |Pypi Release| image:: https://img.shields.io/pypi/v/py_cake.svg
+.. |Python Version| image:: https://img.shields.io/pypi/pyversions/py_cake.svg
 .. |Build Status| image:: https://travis-ci.org/chuter/pycake.svg?branch=master
 .. |Coverage Status| image:: https://codecov.io/gh/chuter/pycake/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/chuter/pycake
