@@ -7,23 +7,23 @@ init:
 
 help:
 	@echo make init
-	@echo        prepare development environment, use only once
+	@echo "       prepare development environment, use only once\n"
 	@echo make clean
-	@echo        remove all build, test, coverage and python artifacts
+	@echo "       remove all build, test, coverage and python artifacts\n"
 	@echo make ci
-	@echo        run tests quickly with the default Python
+	@echo "       run tests quickly with the default Python\n"
 	@echo make test-all
-	@echo        run tests on every Python version with detox
+	@echo "       run tests on every Python version with detox\n"
 	@echo make lint
-	@echo        check style with flake8
+	@echo "       check style with flake8\n"
 	@echo make coverage
-	@echo        check code coverage quickly with the default Python
+	@echo "       check code coverage quickly with the default Python\n"
 	@echo make release
-	@echo        package and upload a release
+	@echo "       package and upload a release\n"
 	@echo make dist
-	@echo        builds source and wheel package
+	@echo "       builds source and wheel package\n"
 	@echo make install
-	@echo        install the package to the active Python's site-packages
+	@echo "       install the package to the active Python's site-packages"
 
 clean: clean-build clean-pyc clean-test
 
