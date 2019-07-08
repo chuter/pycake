@@ -30,11 +30,23 @@ def prepare(ctx, **kwargs):
 
     project_dir = prepare()
 
-    click.echo(u'\n\nThe target project is: {}\n'.format(project_dir))
+    click.echo('\n\nThe target project is: {}\n'.format(project_dir))
 
-    click.echo(u'You should run follow command first: {}\n'.format(
+    click.echo('You should run follow command first: {}\n'.format(
         crayons.yellow("make init", bold=True)
     ))
+
+
+@cli.command(
+    short_help="Release due to .pycake",
+    context_settings=dict(ignore_unknown_options=True, allow_extra_args=True),
+)
+@click.option('--docker', help="build Dockerfile", is_flag=True)
+def release(docker, **kwargs):
+    from .commands import release
+
+    release_result = release(with_docker_file=docker, **kwargs)
+    click.echo(release_result)
 
 
 if __name__ == "__main__":

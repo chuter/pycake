@@ -1,0 +1,31 @@
+swagger: "2.0"
+
+info:
+  title: "Python MS Monitor"
+  version: "1.0"
+
+basePath: /_monitor
+
+schemes:
+ - http
+paths:
+  /health:
+    get:
+      operationId: servicemesh.monitor.health
+      responses:
+        '200':
+          description: 'report'  
+
+  /info:
+    get:
+      operationId: servicemesh.monitor.info
+      responses:
+        '200':
+          description: 'report'
+
+  /metrics:
+    get:
+      operationId: servicemesh.monitor.metrics
+      responses:
+        '200':
+          description: 'report'

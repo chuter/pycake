@@ -1,0 +1,14 @@
+
+# your application/service name to expose as
+app.title = "{{cookiecutter.project_name}}"
+app.name = "{{cookiecutter.project_short_name}}"
+app.version = "{{cookiecutter.version}}"
+
+
+# ********************************************************
+#                Release Configuation
+# ********************************************************
+openapi.enabled = True
+
+# all ymls should be under .app dir
+openapi.ymls = ['{{cookiecutter.project_short_name}}']

@@ -1,0 +1,31 @@
+swagger: "2.0"
+
+info:
+  title: "Python MS Manage"
+  version: "1.0"
+
+basePath: /_manage
+
+schemes:
+ - http
+paths:
+  /start:
+    get:
+      operationId: servicemesh.commands.start
+      responses:
+        '200':
+          description: 'report'
+
+  /stop:
+    get:
+      operationId: servicemesh.commands.stop
+      responses:
+        '200':
+          description: 'report'
+
+  /config:
+    get:
+      operationId: servicemesh.commands.config
+      responses:
+        '200':
+          description: 'report'

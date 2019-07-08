@@ -15,13 +15,25 @@ def format_help(help):
         "  prepare",
         str(crayons.green("  prepare", bold=True))
     )
+    help = help.replace(
+        "  release",
+        str(crayons.red("  release", bold=True))
+    )
     additional_help = """
 Usage Examples:
    Prepare the stuff for start new Python project
    $ {0}
 
+   Release the project as REST APP
+   $ {1}
+
+   Release the project as REST APP with Dockerfile
+   $ {2}
+
 Commands:""".format(
-        crayons.red("pycake prepare"),
+        crayons.green("pycake prepare"),
+        crayons.red("pycake release"),
+        crayons.red("pycake release --docker"),
     )
     help = help.replace("Commands:", additional_help)
     return help

@@ -24,3 +24,12 @@ docs/_build
 *.egg
 env/
 dist/
+logs
+
+# MAC
+.DS_store
+
+
+# pycake
+.release
+!.app

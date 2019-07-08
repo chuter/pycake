@@ -2,7 +2,8 @@
 .DEFAULT_GOAL := help
 
 init:
-	pip install pipenv --upgrade
+	pip3 install pipenv --upgrade
+	pipenv --three
 	pipenv install --dev --skip-lock
 
 help:
@@ -62,7 +63,7 @@ coverage: pipenv-install
 	pipenv run py.test --cov-config .coveragerc --verbose --cov-report term --cov-report xml --cov={{ cookiecutter.project_short_name }} tests
 
 release: lint dist
-	pip install --upgrade twine
+	pip3 install --upgrade twine
 	twine check dist/*
 	twine upload dist/*	
 

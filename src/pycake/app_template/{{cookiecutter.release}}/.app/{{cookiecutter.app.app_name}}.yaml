@@ -1,0 +1,26 @@
+# visit https://editor.swagger.io/ for edit your swagger file
+
+swagger: "2.0"
+
+info:
+  title: "{{cookiecutter.app.app_title}}"
+  version: "{{cookiecutter.app.app_version}}"
+
+schemes:
+ - http
+
+basePath: /
+
+paths:
+  /echo:
+    get:
+      operationId: {{cookiecutter.app.app_name}}.apis.echo
+      parameters:
+        - in: query
+          name: content
+          type: string
+          required: true
+
+      responses:
+        '200':
+          description: 'OK'
