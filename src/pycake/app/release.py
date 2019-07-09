@@ -75,7 +75,7 @@ def _generate_docker_file(**kwargs):
                 'FROM python:3.7.2-alpine3.9',
                 'FROM faizanbashir/python-datascience:3.6'
             )
-        fp.write(DOCKER_FILE_CONTENT)
+        fp.write(_)
 
 
 def release_as_REST(app_settings, with_docker_file=False, **kwargs):
