@@ -45,7 +45,10 @@ def prepare(ctx, **kwargs):
 def release(docker, **kwargs):
     from .commands import release
 
-    release_result = release(with_docker_file=docker, **kwargs)
+    release_result = release(
+        with_docker_file=docker,
+        **kwargs
+    )
     click.echo(release_result)
 
 

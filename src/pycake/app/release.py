@@ -60,15 +60,30 @@ CMD python ./app.py
 """
 
 
-def _generate_docker_file():
+def _generate_docker_file(**kwargs):
+    print('>> generation docker file')
+    is_based_datascience = False
+    with open(os.path.join(TARGET_DIR, "requirements.txt"), 'r') as f:
+        requires = f.read()
+        if (requires.find('numpy') > 0 or requires.find('pandas') > 0):
+            is_based_datascience = True
+
     with open(os.path.join(TARGET_DIR, "Dockerfile"), 'w') as fp:
+        _ = DOCKER_FILE_CONTENT
+        if is_based_datascience:
+            _ = _.replace(
+                'FROM python:3.7.2-alpine3.9',
+                'FROM faizanbashir/python-datascience:3.6'
+            )
         fp.write(DOCKER_FILE_CONTENT)
 
 
 def release_as_REST(app_settings, with_docker_file=False, **kwargs):
     if os.path.exists(TARGET_DIR):
+        print('>> removing old release')
         _rm_pre_release(TARGET_DIR)
 
+    print('>> building...')
     cookiecutter(
         kwargs['tmpl_dir'],
         no_input=True,
@@ -114,7 +129,7 @@ def release_as_REST(app_settings, with_docker_file=False, **kwargs):
         )
 
     if with_docker_file:
-        _generate_docker_file()
+        _generate_docker_file(**kwargs)
 
     return """
 start your app: cd .release & pipenv run python app.py
