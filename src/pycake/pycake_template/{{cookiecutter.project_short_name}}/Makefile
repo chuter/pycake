@@ -54,7 +54,7 @@ pipenv-install: ## install the package to pipenv for test
 	pipenv run python setup.py -q install
 
 ci: pipenv-install
-	pipenv run py.test -n 8 --junitxml=report.xml
+	pipenv run py.test --junit-xml=report.xml
 
 test-all:
 	pipenv run detox
