@@ -117,7 +117,8 @@ def release_as_REST(app_settings, with_docker_file=False, **kwargs):
 
     shutil.copytree(
         os.path.join("build", "lib", app_settings.app_name),
-        os.path.join(TARGET_DIR, "lib", app_settings.app_name)
+        os.path.join(TARGET_DIR, "lib", app_settings.app_name),
+        ignore=shutil.ignore_patterns('__pycache__', '*.pyc')
     )
 
     with open(os.path.join(TARGET_DIR, "requirements.txt"), 'w') as fp:
