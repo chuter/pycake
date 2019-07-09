@@ -40,7 +40,7 @@ def build_app_config(): # noqa
     app_settings = _AppSettings()
     _ = {}
 
-    with open(PYCAKE_SETTINGS, 'r') as file:
+    with open(PYCAKE_SETTINGS, 'r', encoding='utf-8') as file:
         file_contents = file.read()
         exec(
             file_contents.replace('.', '_'),
