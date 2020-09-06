@@ -1,5 +1,5 @@
 [[source]]
-url = "https://pypi.org/simple"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 verify_ssl = true
 name = "pypi"
 
@@ -13,5 +13,9 @@ pytest-xdist = "*"
 "flake8" = "*"
 codecov = "*"
 mock = "*"
-detox = "*"
-tox = "*"
+detox = "==0.19"
+tox = "<3.7"
+{{cookiecutter.project_short_name}} = {path = ".",editable = true}
+
+[requires]
+python_version = "3.7"

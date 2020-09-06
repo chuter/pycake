@@ -60,6 +60,10 @@ CMD python ./app.py
 """
 
 
+DATASCIENCE_PACKAGES = ['numpy', 'pandas', 'matplotlib', 'scipy', 'scikit-learn', 'nltk']
+
+
+# TODO(chuter): 细化对Image的检测和对requirements的修改
 def _generate_docker_file(**kwargs):
     print('>> generation docker file')
     is_based_datascience = False
@@ -76,6 +80,26 @@ def _generate_docker_file(**kwargs):
                 'FROM faizanbashir/python-datascience:3.6'
             )
         fp.write(_)
+
+    if is_based_datascience:
+        # remove packages included in image yet
+        with open(os.path.join(TARGET_DIR, "requirements.txt_"), 'w') as fout:
+            with open(os.path.join(TARGET_DIR, "requirements.txt"), 'r') as fin:
+                should_skip_line = False
+                for line in fin.readlines():
+                    for package in DATASCIENCE_PACKAGES:
+                        if (line.find(package) >= 0):
+                            should_skip_line = True
+                            break
+
+                    if not should_skip_line:
+                        fout.write(line)
+
+        os.remove(os.path.join(TARGET_DIR, "requirements.txt"))
+        os.rename(
+            os.path.join(TARGET_DIR, "requirements.txt_"),
+            os.path.join(TARGET_DIR, "requirements.txt")
+        )
 
 
 def release_as_REST(app_settings, with_docker_file=False, **kwargs):
