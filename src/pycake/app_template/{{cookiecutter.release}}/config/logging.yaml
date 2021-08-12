@@ -39,11 +39,6 @@ handlers:
     encoding: utf8
 
 loggers:
-  hummber_gang_chat:
-    level: INFO
-    handlers: [info_file_handler, error_file_handler]
-    propagate: no
-
   #
   #==================================================
   #               containers
@@ -61,6 +56,11 @@ loggers:
 
   tornado.general:
     level: WARN
+    handlers: [info_file_handler, error_file_handler]
+    propagate: no
+
+  aiohttp.access:
+    level: INFO
     handlers: [info_file_handler, error_file_handler]
     propagate: no
 

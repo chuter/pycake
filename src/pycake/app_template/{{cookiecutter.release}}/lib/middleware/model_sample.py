@@ -19,9 +19,9 @@ from aiohttp.web import middleware
 __all__ = ['build_model_sample_middleware']
 
 
-MODEL_NAME = os.environ.get('PYCAKE_SAMPLE_MODEL_NAME', None)
-MODEL_VERSION = os.environ.get('PYCAKE_SAMPLE_MODEL_VERSION', None)
-SAMPLE_LOG_BACKUP_COUNT = os.environ.get('PYCAKE_SAMPLE_LOG_BACKUP_COUNT', 7)
+MODEL_NAME = os.environ.get('model_name', None)
+MODEL_VERSION = os.environ.get('model_version', None)
+SAMPLE_LOG_BACKUP_COUNT = os.environ.get('model_sample_log_backup_count', 7)
 
 
 sample_logger = JsonLogger(name='jcake', flatten=True)
@@ -70,6 +70,7 @@ def build_model_sample_middleware(collect_api, sample_ratio=50, **kwargs):
         raise Exception('PYCAKE_SAMPLE_MODEL_NAME and PYCAKE_SAMPLE_MODEL_VERSION not defined')
 
     random_ins = random.Random()
+    sample_ratio = int(sample_ratio)
 
     def should_sample(request, sample_ratio):
         if request._method == 'GET':

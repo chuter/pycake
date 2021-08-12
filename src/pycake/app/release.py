@@ -56,7 +56,7 @@ def _install_deppackages_ifneed(app_settings):
 
 
 DOCKER_FILE_CONTENT = """
-FROM harbor.weizhipin.com/tcloud/python:xgboost-01
+FROM harbor.weizhipin.com/tcloud/python:xgboost-02
 
 COPY .release/ /app
 
@@ -101,8 +101,9 @@ def _generate_docker_file(**kwargs):
             os.path.join(TARGET_DIR, "requirements.txt")
         )
 
-    with open(os.path.join(TCLOUD_DIR, "Dockerfile"), 'w') as fp:
-        fp.write(DOCKER_FILE_CONTENT)
+    if not os.path.isfile(os.path.join(TCLOUD_DIR, "Dockerfile")):
+        with open(os.path.join(TCLOUD_DIR, "Dockerfile"), 'w') as fp:
+            fp.write(DOCKER_FILE_CONTENT)
 
 
 def release_as_REST(app_settings, with_docker_file=False, **kwargs):
@@ -111,12 +112,14 @@ def release_as_REST(app_settings, with_docker_file=False, **kwargs):
         _rm_pre_release(TARGET_DIR)
 
     print('>> building...')
+    app = app_settings.json()
+    app.update(os.environ.__dict__)
     cookiecutter(
         kwargs['tmpl_dir'],
         no_input=True,
         overwrite_if_exists=True,
         extra_context={
-            "app": app_settings.json()
+            "app": app
         }
     )
 
