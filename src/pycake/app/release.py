@@ -58,7 +58,7 @@ def _install_deppackages_ifneed(app_settings):
 DOCKER_FILE_CONTENT = """
 FROM harbor.weizhipin.com/tcloud/python:xgboost-01
 
-COPY . /app
+COPY .release/ /app
 
 WORKDIR /app
 
@@ -142,10 +142,6 @@ def release_as_REST(app_settings, with_docker_file=False, **kwargs):
         shutil.copytree(
             os.path.join(TARGET_DIR, TCLOUD_DIR),
             TCLOUD_DIR
-        )
-    else:
-        shutil.rmtree(
-            os.path.join(TARGET_DIR, TCLOUD_DIR)
         )
 
     if not app_settings.model_sample:

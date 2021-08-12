@@ -6,10 +6,12 @@
 
 cd ..
 
-pip3 install -U py.cake
+pip3 install -U pipenv -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip3 install -U py.cake -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 py.cake release --docker
 
 mv .release .tcloud/
 
-cd .tcloud/.release
+cd .tcloud/
+exit 0

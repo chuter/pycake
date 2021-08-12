@@ -1,7 +1,7 @@
 
 FROM harbor.weizhipin.com/tcloud/python:xgboost-01
 
-COPY . /app
+COPY .release/ /app
 
 WORKDIR /app
 
