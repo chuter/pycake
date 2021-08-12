@@ -60,14 +60,14 @@ from middleware import build_model_sample_middleware # noqa
 {% if 'model_name' in cookiecutter.app %}
 app.app.middlewares.append(build_model_sample_middleware(
     '{{cookiecutter.app.model_sample_api}}',
-    sample_ratio={{cookiecutter.app.model_sample_ratio|int}},
+    sample_ratio=os.environ.get('model_sample_ratio', None) or {{cookiecutter.app.model_sample_ratio|int}},
     model_name='{{cookiecutter.app.model_name}}',
     model_version='{{cookiecutter.app.model_version|replace('_', '.')}}'
 ))
 {% else %}
 app.app.middlewares.append(build_model_sample_middleware(
     '{{cookiecutter.app.model_sample_api}}',
-    sample_ratio={{cookiecutter.app.model_sample_ratio|int}}
+    sample_ratio=os.environ.get('model_sample_ratio', None) or {{cookiecutter.app.model_sample_ratio|int}}
 ))
 {%- endif -%}
 {%- endif -%}
