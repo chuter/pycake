@@ -21,7 +21,6 @@ __all__ = ['build_model_sample_middleware']
 
 MODEL_NAME = os.environ.get('model_name', None)
 MODEL_VERSION = os.environ.get('model_version', None)
-MODEL_SAMPLE_RATIO = os.environ.get('model_sample_ratio', None)
 SAMPLE_LOG_BACKUP_COUNT = os.environ.get('model_sample_log_backup_count', 7)
 
 
