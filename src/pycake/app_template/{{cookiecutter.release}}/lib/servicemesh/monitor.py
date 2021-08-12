@@ -10,12 +10,8 @@ def info():
     }
 
 
-def health():
-    return {
-        "cpu": 8,
-        "mem": 6000,
-        "net": 0.5
-    }
+def ping():
+    return "pong"
 
 
 def metrics():

@@ -11,6 +11,8 @@ from cookiecutter.main import cookiecutter
 TARGET_DIR = '.release'
 APP_CONFIG_DIR = '.app'
 API_EXPORT = 'apis.py'
+TCLOUD_DIR = '.tcloud'
+MIDDLEWARN_DIR = os.path.join('lib', 'middleware')
 
 
 def _rm_pre_release(path):
@@ -32,22 +34,29 @@ def _build():
     )
 
 
-def _install_deppackages_ifneed():
+def _install_deppackages_ifneed(app_settings):
     with open("Pipfile", 'r') as file:
         packages = file.read()
 
-    if packages.find('connexion') > 0 and packages.find('tornado') > 0:
+    if app_settings.model_sample:
+        subprocess.run(
+            ["pipenv", "install", "aiologger", "aiologger[aiofiles]"],
+            check=True,
+            universal_newlines=True
+        )
+
+    if packages.find('connexion') > 0 and packages.find('aiohttp') > 0:
         return
 
     subprocess.run(
-        ["pipenv", "install", "connexion[swagger-ui]", "tornado"],
+        ["pipenv", "install", "connexion[swagger-ui]", "tornado", "aiohttp", "aiohttp-jinja2"],
         check=True,
         universal_newlines=True
     )
 
 
 DOCKER_FILE_CONTENT = """
-FROM python:3.7.2-alpine3.9
+FROM harbor.weizhipin.com/tcloud/python:xgboost-01
 
 COPY . /app
 
@@ -60,7 +69,7 @@ CMD python ./app.py
 """
 
 
-DATASCIENCE_PACKAGES = ['numpy', 'pandas', 'matplotlib', 'scipy', 'scikit-learn', 'nltk']
+DATASCIENCE_PACKAGES = ['numpy', 'pandas', 'matplotlib', 'scipy', 'scikit-learn', 'nltk', 'xgboost']
 
 
 # TODO(chuter): 细化对Image的检测和对requirements的修改
@@ -71,15 +80,6 @@ def _generate_docker_file(**kwargs):
         requires = f.read()
         if (requires.find('numpy') > 0 or requires.find('pandas') > 0):
             is_based_datascience = True
-
-    with open(os.path.join(TARGET_DIR, "Dockerfile"), 'w') as fp:
-        _ = DOCKER_FILE_CONTENT
-        if is_based_datascience:
-            _ = _.replace(
-                'FROM python:3.7.2-alpine3.9',
-                'FROM faizanbashir/python-datascience:3.6'
-            )
-        fp.write(_)
 
     if is_based_datascience:
         # remove packages included in image yet
@@ -100,6 +100,9 @@ def _generate_docker_file(**kwargs):
             os.path.join(TARGET_DIR, "requirements.txt_"),
             os.path.join(TARGET_DIR, "requirements.txt")
         )
+
+    with open(os.path.join(TARGET_DIR, TCLOUD_DIR, "Dockerfile"), 'w') as fp:
+        fp.write(DOCKER_FILE_CONTENT)
 
 
 def release_as_REST(app_settings, with_docker_file=False, **kwargs):
@@ -134,9 +137,27 @@ def release_as_REST(app_settings, with_docker_file=False, **kwargs):
             APP_CONFIG_DIR,
             os.path.join(TARGET_DIR, APP_CONFIG_DIR)
         )
+
+    if not os.path.exists(TCLOUD_DIR):
+        shutil.copytree(
+            os.path.join(TARGET_DIR, TCLOUD_DIR),
+            TCLOUD_DIR
+        )
+    else:
+        shutil.rmtree(
+            os.path.join(TARGET_DIR, TCLOUD_DIR)
+        )
+
+    if not app_settings.model_sample:
+        shutil.rmtree(
+            os.path.join(TARGET_DIR, MIDDLEWARN_DIR)
+        )
+    else:
+        os.makedirs(os.path.join(TARGET_DIR, "sample"), exist_ok=True)
+
     os.remove(os.path.join(TARGET_DIR, API_EXPORT))
 
-    _install_deppackages_ifneed()
+    _install_deppackages_ifneed(app_settings)
     _build()
 
     shutil.copytree(
@@ -159,7 +180,7 @@ def release_as_REST(app_settings, with_docker_file=False, **kwargs):
     return """
 start your app: cd .release & pipenv run python app.py
 
-Visit your app by url: http://localhost:9502/ui
+Visit your app by url: http://localhost:9502/api/ui
 """
 
 

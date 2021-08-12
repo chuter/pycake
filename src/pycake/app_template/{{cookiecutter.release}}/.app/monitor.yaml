@@ -4,28 +4,14 @@ info:
   title: "Python MS Monitor"
   version: "1.0"
 
-basePath: /_monitor
+basePath: /monitor
 
 schemes:
  - http
 paths:
-  /health:
+  /ping:
     get:
-      operationId: servicemesh.monitor.health
+      operationId: servicemesh.monitor.ping
       responses:
         '200':
-          description: 'report'  
-
-  /info:
-    get:
-      operationId: servicemesh.monitor.info
-      responses:
-        '200':
-          description: 'report'
-
-  /metrics:
-    get:
-      operationId: servicemesh.monitor.metrics
-      responses:
-        '200':
-          description: 'report'
+          description: 'OK'

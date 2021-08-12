@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+from __future__ import absolute_import
 
 import os
 import sys
@@ -48,12 +49,28 @@ logger = logging.getLogger(APP_NAME)
 #                 start app
 # ==================================================
 #
-app = connexion.FlaskApp(
+app = connexion.AioHttpApp(
     __name__,
     port=EXPOSE,
-    specification_dir='.app/',
-    server='tornado'
+    specification_dir='.app/'
 )
+
+{% if cookiecutter.app.model_sample == 'True' %}
+from middleware import build_model_sample_middleware # noqa
+{% if 'model_name' in cookiecutter.app %}
+app.app.middlewares.append(build_model_sample_middleware(
+    '{{cookiecutter.app.model_sample_api}}',
+    sample_ratio={{cookiecutter.app.model_sample_ratio|int}},
+    model_name='{{cookiecutter.app.model_name}}',
+    model_version='{{cookiecutter.app.model_version|replace('_', '.')}}'
+))
+{% else %}
+app.app.middlewares.append(build_model_sample_middleware(
+    '{{cookiecutter.app.model_sample_api}}',
+    sample_ratio={{cookiecutter.app.model_sample_ratio|int}}
+))
+{%- endif -%}
+{%- endif -%}
 
 {% for yaml in cookiecutter.app.openapi_ymls %}
 app.add_api('{{ yaml }}.yaml')
@@ -61,7 +78,7 @@ app.add_api('{{ yaml }}.yaml')
 
 
 # ms
-# app.add_api('monitor.yaml')
+app.add_api('monitor.yaml')
 # app.add_api('manage.yaml')
 
 app.run()
