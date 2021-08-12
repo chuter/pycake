@@ -101,7 +101,7 @@ def _generate_docker_file(**kwargs):
             os.path.join(TARGET_DIR, "requirements.txt")
         )
 
-    with open(os.path.join(TARGET_DIR, TCLOUD_DIR, "Dockerfile"), 'w') as fp:
+    with open(os.path.join(TCLOUD_DIR, "Dockerfile"), 'w') as fp:
         fp.write(DOCKER_FILE_CONTENT)
 
 
