@@ -34,7 +34,7 @@ handler = AsyncTimedRotatingFileHandler(
 sample_logger.add_handler(handler)
 
 
-async def build_sample_info(request_ms, request, response):
+async def build_sample_info(request_ms, request, response, model_name, model_version):
     """
     构造采样的信息.
     该采样实现目前只支持POST类型的请求.
@@ -51,7 +51,9 @@ async def build_sample_info(request_ms, request, response):
         "ts": int(time.time() * 1000),
         "cost": "%.2f" % request_ms,
         "sample": request_body,
-        "prediction": response_text
+        "prediction": response_text,
+        "__mn": model_name,
+        "__mv": model_version
     }
 
 
@@ -88,7 +90,9 @@ def build_model_sample_middleware(collect_api, sample_ratio=50, **kwargs):
         response = await handler(request)
         end_time_s = time.time()
         delta_s = end_time_s - start_time_s
-        sample_info = await build_sample_info(delta_s * 100, request, response)
+        sample_info = await build_sample_info(delta_s * 100, request, response,
+                                              kwargs.get('model_name', MODEL_NAME),
+                                              kwargs.get('model_version', MODEL_VERSION))
         sample_logger.info(sample_info)
         return response
 
