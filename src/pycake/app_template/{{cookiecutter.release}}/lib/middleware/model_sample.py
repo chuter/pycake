@@ -49,7 +49,7 @@ async def build_sample_info(request_ms, request, response, model_name, model_ver
     response_text = response.text
     return {
         "ts": int(time.time() * 1000),
-        "cost": "%.2f" % request_ms,
+        "cost": int(request_ms),
         "sample": request_body,
         "prediction": response_text,
         "__mn": model_name,
