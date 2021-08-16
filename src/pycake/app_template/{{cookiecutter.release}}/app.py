@@ -52,7 +52,7 @@ logger = logging.getLogger(APP_NAME)
 # ==================================================
 #
 
-
+{% if cookiecutter.app.openapi_model == 'True' %}
 from sanic import Sanic
 from sanic_openapi import doc, openapi2_blueprint
 from servicemesh.blueprint import bp as monitor_bp

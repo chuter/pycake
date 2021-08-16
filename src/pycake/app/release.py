@@ -144,10 +144,6 @@ def release_as_REST(app_settings, with_docker_file=False, **kwargs):
                 os.path.join(TARGET_DIR, APP_CONFIG_DIR),
                 APP_CONFIG_DIR
             )
-            shutil.copyfile(
-                os.path.join(TARGET_DIR, API_EXPORT),
-                os.path.join("src", app_settings.app_name, API_EXPORT)
-            )
         else:
             shutil.rmtree(
                 os.path.join(TARGET_DIR, APP_CONFIG_DIR)
@@ -159,6 +155,12 @@ def release_as_REST(app_settings, with_docker_file=False, **kwargs):
     else:
         shutil.rmtree(
             os.path.join(TARGET_DIR, APP_CONFIG_DIR)
+        )
+
+    if not os.path.exists(os.path.join("src", app_settings.app_name, API_EXPORT)):
+        shutil.copyfile(
+            os.path.join(TARGET_DIR, API_EXPORT),
+            os.path.join("src", app_settings.app_name, API_EXPORT)
         )
 
     if not os.path.exists(TCLOUD_DIR):
@@ -199,7 +201,14 @@ def release_as_REST(app_settings, with_docker_file=False, **kwargs):
     if with_docker_file:
         _generate_docker_file(**kwargs)
 
-    return """
+    if app_settings.openapi_model:
+        return """
+start your app: cd .release & pipenv run python app.py
+
+Visit your app by url: http://localhost:9502/swagger
+"""
+    else:
+        return """
 start your app: cd .release & pipenv run python app.py
 
 Visit your app by url: http://localhost:9502/api/ui
