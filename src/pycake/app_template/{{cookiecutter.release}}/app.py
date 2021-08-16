@@ -6,7 +6,9 @@ import sys
 import yaml
 
 import logging.config
+{% if cookiecutter.app.openapi_model != 'True' %}
 import connexion
+{% endif %}
 
 #
 # ==================================================
@@ -49,36 +51,34 @@ logger = logging.getLogger(APP_NAME)
 #                 start app
 # ==================================================
 #
+
+
+from sanic import Sanic
+from sanic_openapi import doc, openapi2_blueprint
+from servicemesh.blueprint import bp as monitor_bp
+from model.blueprint import bp as model_bp
+
+
+app = Sanic("{{cookiecutter.app.app_name}}")
+app.blueprint(openapi2_blueprint)
+app.blueprint(monitor_bp)
+app.blueprint(model_bp)
+
+app.run(host="0.0.0.0", port=EXPOSE)
+{% else %}
 app = connexion.AioHttpApp(
     __name__,
     port=EXPOSE,
     specification_dir='.app/'
 )
 
-{% if cookiecutter.app.model_sample == 'True' %}
-from middleware import build_model_sample_middleware # noqa
-{% if 'model_name' in cookiecutter.app %}
-app.app.middlewares.append(build_model_sample_middleware(
-    '{{cookiecutter.app.model_sample_api}}',
-    sample_ratio=os.environ.get('model_sample_ratio', None) or {{cookiecutter.app.model_sample_ratio|int}},
-    model_name='{{cookiecutter.app.model_name}}',
-    model_version='{{cookiecutter.app.model_version|replace('_', '.')}}'
-))
-{% else %}
-app.app.middlewares.append(build_model_sample_middleware(
-    '{{cookiecutter.app.model_sample_api}}',
-    sample_ratio=os.environ.get('model_sample_ratio', None) or {{cookiecutter.app.model_sample_ratio|int}}
-))
-{%- endif -%}
-{%- endif -%}
-
 {% for yaml in cookiecutter.app.openapi_ymls %}
 app.add_api('{{ yaml }}.yaml')
 {% endfor %}
-
 
 # ms
 app.add_api('monitor.yaml')
 # app.add_api('manage.yaml')
 
 app.run()
+{%- endif -%}

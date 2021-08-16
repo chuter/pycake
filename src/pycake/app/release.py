@@ -12,7 +12,10 @@ TARGET_DIR = '.release'
 APP_CONFIG_DIR = '.app'
 API_EXPORT = 'apis.py'
 TCLOUD_DIR = '.tcloud'
-MIDDLEWARN_DIR = os.path.join('lib', 'middleware')
+MODEL_DIR = os.path.join('lib', 'model')
+MIDDLEWARN_FILE = os.path.join(MODEL_DIR, 'middleware.py')
+
+INSTALL_PACKAGE_COMMON_ARGS = ["-i", "https://pypi.tuna.tsinghua.edu.cn/simple"]
 
 
 def _rm_pre_release(path):
@@ -38,21 +41,33 @@ def _install_deppackages_ifneed(app_settings):
     with open("Pipfile", 'r') as file:
         packages = file.read()
 
-    if app_settings.model_sample:
+    if app_settings.openapi_model:
+        if packages.find('sanic') > 0 and packages.find('sanic_openapi') > 0:
+            return
+
+        if app_settings.model_sample:
+            subprocess.run(
+                ["pipenv", "install", "aiologger", "\"aiofiles>=0.6.0\""] +
+                INSTALL_PACKAGE_COMMON_ARGS,
+                check=True,
+                universal_newlines=True
+            )
+
         subprocess.run(
-            ["pipenv", "install", "aiologger", "aiologger[aiofiles]"],
+            ["pipenv", "install", "sanic", "sanic_openapi"] + INSTALL_PACKAGE_COMMON_ARGS,
             check=True,
             universal_newlines=True
         )
+    else:
+        if packages.find('connexion') > 0 and packages.find('aiohttp') > 0:
+            return
 
-    if packages.find('connexion') > 0 and packages.find('aiohttp') > 0:
-        return
-
-    subprocess.run(
-        ["pipenv", "install", "connexion[swagger-ui]", "tornado", "aiohttp", "aiohttp-jinja2"],
-        check=True,
-        universal_newlines=True
-    )
+        subprocess.run(
+            ["pipenv", "install", "connexion[swagger-ui]", "tornado", "aiohttp",
+             "aiohttp-jinja2"] + INSTALL_PACKAGE_COMMON_ARGS,
+            check=True,
+            universal_newlines=True
+        )
 
 
 DOCKER_FILE_CONTENT = """
@@ -123,21 +138,26 @@ def release_as_REST(app_settings, with_docker_file=False, **kwargs):
         }
     )
 
-    if not os.path.exists(APP_CONFIG_DIR):
-        shutil.copytree(
-            os.path.join(TARGET_DIR, APP_CONFIG_DIR),
-            APP_CONFIG_DIR
-        )
-        shutil.copyfile(
-            os.path.join(TARGET_DIR, API_EXPORT),
-            os.path.join("src", app_settings.app_name, API_EXPORT)
-        )
+    if not app_settings.openapi_model:
+        if not os.path.exists(APP_CONFIG_DIR):
+            shutil.copytree(
+                os.path.join(TARGET_DIR, APP_CONFIG_DIR),
+                APP_CONFIG_DIR
+            )
+            shutil.copyfile(
+                os.path.join(TARGET_DIR, API_EXPORT),
+                os.path.join("src", app_settings.app_name, API_EXPORT)
+            )
+        else:
+            shutil.rmtree(
+                os.path.join(TARGET_DIR, APP_CONFIG_DIR)
+            )
+            shutil.copytree(
+                APP_CONFIG_DIR,
+                os.path.join(TARGET_DIR, APP_CONFIG_DIR)
+            )
     else:
         shutil.rmtree(
-            os.path.join(TARGET_DIR, APP_CONFIG_DIR)
-        )
-        shutil.copytree(
-            APP_CONFIG_DIR,
             os.path.join(TARGET_DIR, APP_CONFIG_DIR)
         )
 
@@ -147,12 +167,15 @@ def release_as_REST(app_settings, with_docker_file=False, **kwargs):
             TCLOUD_DIR
         )
 
-    if not app_settings.model_sample:
+    if not app_settings.openapi_model:
         shutil.rmtree(
-            os.path.join(TARGET_DIR, MIDDLEWARN_DIR)
+            os.path.join(TARGET_DIR, MODEL_DIR)
         )
     else:
-        os.makedirs(os.path.join(TARGET_DIR, "sample"), exist_ok=True)
+        if not app_settings.model_sample:
+            os.remove(os.path.join(TARGET_DIR, MIDDLEWARN_FILE))
+        else:
+            os.makedirs(os.path.join(TARGET_DIR, "sample"), exist_ok=True)
 
     os.remove(os.path.join(TARGET_DIR, API_EXPORT))
 

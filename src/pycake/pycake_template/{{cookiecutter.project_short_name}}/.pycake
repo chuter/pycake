@@ -8,12 +8,12 @@ app.version = "{{cookiecutter.version}}"
 #                Release Configuation
 # ********************************************************
 openapi.enabled = True
+openapi.model = True
 
 # whether to sample the api request and response
 model.sample = False
-model.sample.api = "{{cookiecutter.project_short_name}}"
-# api sample ratio
-model.sample.ratio = 50
+# api sample percent
+model.sample.percent = 50
 
 # all ymls should be under .app dir
 openapi.ymls = ['{{cookiecutter.project_short_name}}']
