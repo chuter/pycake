@@ -100,8 +100,8 @@ def _generate_docker_file(**kwargs):
         # remove packages included in image yet
         with open(os.path.join(TARGET_DIR, "requirements.txt_"), 'w') as fout:
             with open(os.path.join(TARGET_DIR, "requirements.txt"), 'r') as fin:
-                should_skip_line = False
                 for line in fin.readlines():
+                    should_skip_line = False
                     for package in DATASCIENCE_PACKAGES:
                         if (line.find(package) >= 0):
                             should_skip_line = True
