@@ -46,6 +46,6 @@ build_sample_middleware(
     sample_percent=os.environ.get('model_sample_percent', None) or {{cookiecutter.app.model_sample_percent|int}}
 )
 {%- endif -%}
-{%- endif -%}
+{% endif %}
 
 # TODO(chuter): 自动load，切换模型的支持

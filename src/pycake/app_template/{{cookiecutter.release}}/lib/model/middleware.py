@@ -94,9 +94,9 @@ def build_sample_middleware(bp, sample_percent=50, **kwargs):
         end_time_s = time.time()
         start_time_s = request.ctx.__start_time_s
         delta_ms = int((end_time_s - start_time_s) * 1000)
-        api_logger.info("code {}ms predict for {}".format(delta_ms, request.body))
+        api_logger.info("cost {}ms predict for {}".format(delta_ms, request.body))
 
-        if response.status != 200 or should_sample(request, sample_percent):
+        if response.status != 200 or not should_sample(request, sample_percent):
             return response
 
         sample_info = build_sample_info(delta_ms, request, response,
