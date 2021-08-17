@@ -42,22 +42,22 @@ def _install_deppackages_ifneed(app_settings):
         packages = file.read()
 
     if app_settings.openapi_model:
-        if packages.find('sanic') > 0 and packages.find('sanic_openapi') > 0:
+        if packages.find('sanic') > 0 and packages.find('aiologger') > 0:
             return
 
         if app_settings.model_sample:
             subprocess.run(
-                ["pipenv", "install", "aiologger", "\"aiofiles>=0.6.0\""] +
-                INSTALL_PACKAGE_COMMON_ARGS,
+                ["pipenv", "install", "aiologger", "sanic", "sanic_openapi",
+                 "\"aiofiles>=0.6.0\""] + INSTALL_PACKAGE_COMMON_ARGS,
                 check=True,
                 universal_newlines=True
             )
-
-        subprocess.run(
-            ["pipenv", "install", "sanic", "sanic_openapi"] + INSTALL_PACKAGE_COMMON_ARGS,
-            check=True,
-            universal_newlines=True
-        )
+        else:
+            subprocess.run(
+                ["pipenv", "install", "sanic", "sanic_openapi"] + INSTALL_PACKAGE_COMMON_ARGS,
+                check=True,
+                universal_newlines=True
+            )
     else:
         if packages.find('connexion') > 0 and packages.find('aiohttp') > 0:
             return
